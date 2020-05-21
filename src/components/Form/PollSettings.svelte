@@ -1,13 +1,10 @@
 <script>
-  // let spamProtection = false
-  // let multiplePollAnswers = false
-  // let requireAuth = false
-
   export let pollSettings
   export let saveAsDraft
 </script>
 
 <div class="container">
+
   <div class="option-group">
     <label>
       <input type="checkbox" bind:checked="{pollSettings.captcha}" />

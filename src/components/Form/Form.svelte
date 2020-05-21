@@ -3,11 +3,12 @@
   import { flip } from 'svelte/animate'
   import { tick } from 'svelte'
   import { textAreaResize } from '../../helpers/textarea-auto-resize'
+  import Modal from '../Modal.svelte'
   import FormOption from './FormOption.svelte'
   import PollSettings from './PollSettings.svelte'
 
   let formRef
-
+  let showModal = false
   let question = ''
   let optionList = [
     { text: '', id: 1 },
@@ -18,7 +19,7 @@
     multiplePollAnswers: false,
     captcha: false,
   }
-  // $: console.log({ question, optionList, pollSettings })
+
   onMount(() => {
     const draftData = window.location.hash.substring(1)
 
@@ -62,9 +63,16 @@
     }
     console.log(poll)
     history.pushState({ page: 1 }, null, `#${encodeURIComponent(JSON.stringify(poll))}`)
+    showModal = true
   }
 </script>
 
+{#if showModal}
+  <Modal on:close="{() => (showModal = false)}">
+    <p>The URL of this page has been updated with the poll information.</p>
+    <p>At any time, you can continue to edit same poll with using this url</p>
+  </Modal>
+{/if}
 <main>
   <form bind:this="{formRef}">
     <div class="question-container">

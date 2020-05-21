@@ -169,6 +169,9 @@ section {
 body {
   line-height: 1;
 }
+p {
+  margin: 1rem 0rem;
+}
 ol,
 ul {
   list-style: none;
