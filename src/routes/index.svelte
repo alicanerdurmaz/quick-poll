@@ -5,7 +5,5 @@
 <Form />
 
 <style>
-  li {
-    margin: 2rem 0;
-  }
+
 </style>
