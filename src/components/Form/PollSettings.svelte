@@ -1,26 +1,29 @@
 <script>
-  let spamProtection = false
-  let multiplePollAnswers = false
-  let requireAuth = false
+  // let spamProtection = false
+  // let multiplePollAnswers = false
+  // let requireAuth = false
+
+  export let pollSettings
+  export let saveAsDraft
 </script>
 
 <div class="container">
   <div class="option-group">
     <label>
-      <input type="checkbox" bind:checked="{spamProtection}" />
+      <input type="checkbox" bind:checked="{pollSettings.captcha}" />
       <span>Enable Captcha</span>
     </label>
     <label>
-      <input type="checkbox" bind:checked="{multiplePollAnswers}" />
+      <input type="checkbox" bind:checked="{pollSettings.multiplePollAnswers}" />
       <span>Allow multiple votes</span>
     </label>
     <label>
-      <input type="checkbox" bind:checked="{requireAuth}" />
+      <input type="checkbox" bind:checked="{pollSettings.loginToVote}" />
       <span>Login to vote</span>
     </label>
   </div>
   <button class="create">Create Poll</button>
-  <button class="draft">Save as Draft</button>
+  <button class="draft" on:click="{saveAsDraft}">Save as Draft</button>
 </div>
 
 <style>

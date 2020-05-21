@@ -1,9 +1,10 @@
 <script>
+  import { onMount } from 'svelte'
   import { flip } from 'svelte/animate'
   import { tick } from 'svelte'
   import { textAreaResize } from '../../helpers/textarea-auto-resize'
   import FormOption from './FormOption.svelte'
-  import FormSettings from './FormSettings.svelte'
+  import PollSettings from './PollSettings.svelte'
 
   let formRef
 
@@ -12,12 +13,33 @@
     { text: '', id: 1 },
     { text: '', id: 2 },
   ]
+  let pollSettings = {
+    loginToVote: false,
+    multiplePollAnswers: false,
+    captcha: false,
+  }
+  // $: console.log({ question, optionList, pollSettings })
+  onMount(() => {
+    const draftData = window.location.hash.substring(1)
+
+    if (!draftData) return
+    let newDraft
+    try {
+      newDraft = JSON.parse(decodeURIComponent(draftData))
+    } catch (error) {
+      return
+    }
+    question = newDraft.question
+    optionList = newDraft.optionList
+    pollSettings = newDraft.pollSettings
+  })
 
   function addOption() {
     const newHeight = formRef.offsetHeight + 87
     formRef.style.height = newHeight + 'px'
     optionList = [...optionList, { text: '', id: Date.now() }]
   }
+
   async function deleteOption(e, index) {
     const beforeHeight = formRef.offsetHeight
     formRef.style.height = beforeHeight + 'px'
@@ -32,6 +54,15 @@
     const afterHeight = beforeHeight - 87
     formRef.style.height = afterHeight + 'px'
   }
+  function saveAsDraft() {
+    const poll = {
+      pollSettings: pollSettings,
+      optionList: optionList,
+      question: question,
+    }
+    console.log(poll)
+    history.pushState({ page: 1 }, null, `#${encodeURIComponent(JSON.stringify(poll))}`)
+  }
 </script>
 
 <main>
@@ -42,12 +73,9 @@
         class="question"
         placeholder="E.g. What is your favorite programming language ?"
         autocomplete="off"
-        use:textAreaResize
         maxlength="240"
-        data-height="5rem"
         bind:value="{question}"
       ></textarea>
-
     </div>
 
     <ul>
@@ -64,7 +92,7 @@
     <div class="plus"></div>
   </button>
 
-  <FormSettings />
+  <PollSettings bind:pollSettings saveAsDraft="{saveAsDraft}" />
 
 </main>
 
@@ -120,6 +148,7 @@
     color: white;
     border: none;
     font-size: 16px;
+    height: 5rem;
   }
 
   ul {
