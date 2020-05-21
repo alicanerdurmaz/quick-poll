@@ -23,11 +23,12 @@
 
 <style>
   header {
-    width: 100%;
   }
-
+  nav {
+    height: 3rem;
+    margin-bottom: 0;
+  }
   div {
-    width: 100%;
     text-align: center;
   }
   h1 {
@@ -40,10 +41,6 @@
     margin-top: 8px;
   }
 
-  nav {
-    width: 100%;
-    height: 2rem;
-  }
   ul {
     height: 100%;
     display: flex;
@@ -68,9 +65,10 @@
   @media (max-width: 450px) {
     ul {
       justify-content: center;
+      align-items: center;
     }
-    nav {
-      margin-bottom: 1rem;
+    li {
+      margin: 16px;
     }
   }
 </style>

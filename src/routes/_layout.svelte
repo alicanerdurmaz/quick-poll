@@ -4,14 +4,9 @@
   export let segment
 </script>
 
-<main>
-  <Header segment="{segment}" />
-  <slot />
-</main>
+<Header segment="{segment}" />
+<slot />
 
 <style>
-  main {
-    width: 100%;
-    height: 100%;
-  }
+
 </style>

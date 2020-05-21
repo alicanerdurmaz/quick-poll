@@ -1,40 +1,32 @@
 <script>
+  import { fly, scale } from 'svelte/transition'
   import { textAreaResize } from '../../helpers/textarea-auto-resize'
+
+  export let index
+  export let option
+  export let deleteOption
 </script>
 
-<ul>
-  <li class="li">
-    <label for="question" class="label">Option</label>
-    <textarea
-      class="option"
-      placeholder="E.g. Javascript"
-      autocomplete="off"
-      data-height="1rem"
-      use:textAreaResize
-      maxlength="240"
-    ></textarea>
-  </li>
-  <li>
-    <label for="question" class="label">Option</label>
-    <textarea
-      class="option"
-      placeholder="E.g. Rust"
-      autocomplete="off"
-      data-height="1rem"
-      use:textAreaResize
-      maxlength="240"
-    ></textarea>
-  </li>
-</ul>
+<li in:fly="{{ x: -100, duration: 500 }}" out:scale="{{ duration: 800, delay: 0 }}">
+  <label for="question" class="label">Option</label>
+  <textarea
+    class="option"
+    placeholder="Enter Poll Option"
+    autocomplete="off"
+    data-height="1rem"
+    use:textAreaResize
+    maxlength="240"
+    bind:value="{option.text}"
+  ></textarea>
+  {#if option.id > 2}
+    <button on:click="{(e) => deleteOption(e, index)}">X</button>
+  {/if}
+</li>
 
 <style>
-  ul {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
   li {
     width: 100%;
+    display: flex;
     padding: 1rem;
     border-radius: 4px;
     position: relative;
@@ -79,5 +71,21 @@
     background: none;
     color: white;
     font-size: 16px;
+  }
+  button {
+    user-select: none;
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    border-radius: 24px;
+    position: absolute;
+    right: -12px;
+    top: -16px;
+    border: 1px solid rgba(0, 0, 0, 0.404);
+    background-color: var(--secondary-accent);
+    font-size: 1rem;
+    text-align: center;
+    font-weight: bolder;
+    padding-top: 3px;
   }
 </style>

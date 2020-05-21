@@ -1,9 +1,11 @@
 <script>
-  import CreatePoll from '../components/CreatePoll.svelte'
+  import Form from '../components/Form/Form.svelte'
 </script>
 
-<CreatePoll />
+<Form />
 
 <style>
-
+  li {
+    margin: 2rem 0;
+  }
 </style>

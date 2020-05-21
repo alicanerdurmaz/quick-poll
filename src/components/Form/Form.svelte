@@ -1,31 +1,92 @@
 <script>
+  import { flip } from 'svelte/animate'
+  import { tick } from 'svelte'
   import { textAreaResize } from '../../helpers/textarea-auto-resize'
   import FormOption from './FormOption.svelte'
+  import FormSettings from './FormSettings.svelte'
+
+  let formRef
+
+  let question = ''
+  let optionList = [
+    { text: '', id: 1 },
+    { text: '', id: 2 },
+  ]
+
+  function addOption() {
+    const newHeight = formRef.offsetHeight + 87
+    formRef.style.height = newHeight + 'px'
+    optionList = [...optionList, { text: '', id: Date.now() }]
+  }
+  async function deleteOption(e, index) {
+    const beforeHeight = formRef.offsetHeight
+    formRef.style.height = beforeHeight + 'px'
+
+    e.target.blur()
+    e.preventDefault()
+    e.stopPropagation()
+
+    optionList.splice(index, 1)
+    optionList = optionList
+
+    const afterHeight = beforeHeight - 87
+    formRef.style.height = afterHeight + 'px'
+  }
 </script>
 
-<form>
+<main>
+  <form bind:this="{formRef}">
+    <div class="question-container">
+      <label for="question" class="label">Question</label>
+      <textarea
+        class="question"
+        placeholder="E.g. What is your favorite programming language ?"
+        autocomplete="off"
+        use:textAreaResize
+        maxlength="240"
+        data-height="5rem"
+        bind:value="{question}"
+      ></textarea>
 
-  <div class="question-container">
-    <label for="question" class="label">Question</label>
-    <textarea
-      class="question"
-      placeholder="E.g. What is your favorite programming language ?"
-      autocomplete="off"
-      use:textAreaResize
-      maxlength="240"
-      data-height="5rem"
-    ></textarea>
-  </div>
+    </div>
 
-  <FormOption />
+    <ul>
+      {#each optionList as option, index (option.id)}
+        <div animate:flip="{{ duration: 190 }}">
+          <FormOption bind:option deleteOption="{deleteOption}" index="{index}" />
+        </div>
+      {/each}
+    </ul>
+  </form>
 
-</form>
+  <button on:click="{addOption}">
+    Add Option
+    <div class="plus"></div>
+  </button>
+
+  <FormSettings />
+
+</main>
+
+<div class="button-group"></div>
 
 <style>
-  form {
-    width: 100%;
+  main {
+    max-width: 800px;
+    margin: 2rem auto;
     padding: 0 0.5rem;
   }
+  .button-group {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 0.5rem;
+  }
+  form {
+    will-change: height;
+    transition: all 190ms ease;
+    width: 100%;
+  }
+
   .question-container {
     width: 100%;
     margin-bottom: 2.5rem;
@@ -61,14 +122,44 @@
     font-size: 16px;
   }
 
-  /* background-color: var(--background-secondary);
-    max-width: 1200px;
-    height: 60px;
-    margin: 0 auto;
-    text-align: center;
-    background-color: var(--background-secondary);
-    border: 2px solid black;
-    border-top: 0px;
-    border-bottom-left-radius: 24px;
-		border-bottom-right-radius: 24px; */
+  ul {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  button {
+    margin-top: 1rem;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    border-radius: 2px;
+    border: none;
+    font-weight: 600;
+    padding-left: 1rem;
+    background: #00b4db; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #0083b0, #00b4db); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to top,
+      #0083b0,
+      #00b4db
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  button:focus {
+    outline: auto;
+    outline-color: #68e3ff;
+  }
+
+  .plus {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+    background-position: center;
+    background-size: 50% 2px, 2px 50%; /*thickness = 2px, length = 50% (25px)*/
+    background-repeat: no-repeat;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
 </style>
