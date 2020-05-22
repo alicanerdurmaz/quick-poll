@@ -1,6 +1,7 @@
 <script>
   export let pollSettings
   export let saveAsDraft
+  export let createPoll
 </script>
 
 <div class="container">
@@ -19,7 +20,7 @@
       <span>Login to vote</span>
     </label>
   </div>
-  <button class="create">Create Poll</button>
+  <button class="create" on:click="{createPoll}">Create Poll</button>
   <button class="draft" on:click="{saveAsDraft}">Save as Draft</button>
 </div>
 

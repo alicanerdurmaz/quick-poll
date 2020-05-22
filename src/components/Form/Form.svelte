@@ -11,8 +11,8 @@
   let showModal = false
   let question = ''
   let optionList = [
-    { text: '', id: 1 },
-    { text: '', id: 2 },
+    { text: '', id: 'default1' },
+    { text: '', id: 'default2' },
   ]
   let pollSettings = {
     loginToVote: false,
@@ -65,6 +65,22 @@
     history.pushState({ page: 1 }, null, `#${encodeURIComponent(JSON.stringify(poll))}`)
     showModal = true
   }
+  function createPoll() {
+    if (question.length < 3) return
+
+    let emptyOption = false
+    optionList.forEach((option) => {
+      if (option.id === 'default1' || option.id === 'default2') {
+        if (option.text.length < 1) {
+          emptyOption = true
+        }
+      }
+    })
+
+    if (emptyOption) return
+    const filteredOptionList = optionList.filter((e) => e.text.length >= 1)
+    const pollObject = { pollSettings: pollSettings, optionList: filteredOptionList, question: question }
+  }
 </script>
 
 {#if showModal}
@@ -100,7 +116,7 @@
     <div class="plus"></div>
   </button>
 
-  <PollSettings bind:pollSettings saveAsDraft="{saveAsDraft}" />
+  <PollSettings bind:pollSettings saveAsDraft="{saveAsDraft}" createPoll="{createPoll}" />
 
 </main>
 

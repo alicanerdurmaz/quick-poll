@@ -22,8 +22,6 @@
 </header>
 
 <style>
-  header {
-  }
   nav {
     height: 3rem;
     margin-bottom: 0;
