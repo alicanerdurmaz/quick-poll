@@ -1,11 +1,13 @@
 <script>
-  import { onMount } from 'svelte'
+  import { onMount, getContext } from 'svelte'
   import { flip } from 'svelte/animate'
-  import { tick } from 'svelte'
   import { textAreaResize } from '../../helpers/textarea-auto-resize'
   import Modal from '../Modal.svelte'
   import FormOption from './FormOption.svelte'
   import PollSettings from './PollSettings.svelte'
+
+  const aa = getContext('fb')
+  $: console.log($aa)
 
   let formRef
   let showModal = false
@@ -41,7 +43,7 @@
     optionList = [...optionList, { text: '', id: Date.now() }]
   }
 
-  async function deleteOption(e, index) {
+  function deleteOption(e, index) {
     const beforeHeight = formRef.offsetHeight
     formRef.style.height = beforeHeight + 'px'
 
@@ -55,16 +57,18 @@
     const afterHeight = beforeHeight - 87
     formRef.style.height = afterHeight + 'px'
   }
+
   function saveAsDraft() {
     const poll = {
       pollSettings: pollSettings,
       optionList: optionList,
       question: question,
     }
-    console.log(poll)
+
     history.pushState({ page: 1 }, null, `#${encodeURIComponent(JSON.stringify(poll))}`)
     showModal = true
   }
+
   function createPoll() {
     if (question.length < 3) return
 
