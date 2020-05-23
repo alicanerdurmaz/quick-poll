@@ -5,10 +5,13 @@
   import Modal from '../Modal.svelte'
   import FormOption from './FormOption.svelte'
   import PollSettings from './PollSettings.svelte'
+  import Loading from '../Loading.svelte'
 
-  const aa = getContext('fb')
-  $: console.log($aa)
+  const firestore = getContext('firestore')
 
+  let error = false
+  let errorMessage = 'Something went wrong. Please try again later'
+  let loading = false
   let formRef
   let showModal = false
   let question = ''
@@ -70,7 +73,14 @@
   }
 
   function createPoll() {
-    if (question.length < 3) return
+    if (question.length < 3) {
+      errorMessage = 'Question length should be more than 3'
+      error = true
+      setTimeout(() => {
+        error = false
+      }, 3000)
+      return
+    }
 
     let emptyOption = false
     optionList.forEach((option) => {
@@ -81,9 +91,38 @@
       }
     })
 
-    if (emptyOption) return
+    if (emptyOption) {
+      errorMessage = 'There must be at least 2 options'
+      error = true
+      setTimeout(() => {
+        error = false
+      }, 3000)
+      return
+    }
     const filteredOptionList = optionList.filter((e) => e.text.length >= 1)
     const pollObject = { pollSettings: pollSettings, optionList: filteredOptionList, question: question }
+
+    loading = true
+    const db = $firestore
+    db.collection('anonym')
+      .add({
+        pollObject: pollObject,
+      })
+      .then(function () {
+        console.log('Document successfully written!')
+        loading = false
+      })
+      .catch(function (error) {
+        loading = false
+        return error
+      })
+      .then(function (err) {
+        errorMessage = err.message
+        error = true
+        setTimeout(() => {
+          error = false
+        }, 3000)
+      })
   }
 </script>
 
@@ -120,7 +159,18 @@
     <div class="plus"></div>
   </button>
 
-  <PollSettings bind:pollSettings saveAsDraft="{saveAsDraft}" createPoll="{createPoll}" />
+  <div class="pollsettings-container">
+    {#if error}
+      <div class="error">
+        <p class="error-message">{errorMessage}</p>
+      </div>
+    {/if}
+    {#if loading}
+      <Loading />
+    {:else}
+      <PollSettings bind:pollSettings saveAsDraft="{saveAsDraft}" createPoll="{createPoll}" />
+    {/if}
+  </div>
 
 </main>
 
@@ -218,5 +268,20 @@
     background-repeat: no-repeat;
     margin-left: 4px;
     margin-right: 4px;
+  }
+  .pollsettings-container {
+    text-align: center;
+    margin-top: 2rem;
+    background-color: var(--background-secondary);
+    border: 2px solid black;
+    padding: 1rem 1rem;
+  }
+  .error {
+    background: var(--error);
+    border-radius: 4px;
+  }
+  .error-message {
+    margin: 0rem 0;
+    padding: 0.5rem 0;
   }
 </style>

@@ -3,8 +3,8 @@
   import { writable } from 'svelte/store'
   import Form from '../components/Form/Form.svelte'
 
-  let globalFirebase = writable(null)
-  setContext('fb', globalFirebase)
+  let firestore = writable(null)
+  setContext('firestore', firestore)
 
   const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -18,9 +18,9 @@
   }
 
   onMount(() => {
-    $globalFirebase = firebase
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig)
+      $firestore = firebase.firestore()
     }
   })
 </script>

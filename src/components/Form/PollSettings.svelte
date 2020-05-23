@@ -4,33 +4,24 @@
   export let createPoll
 </script>
 
-<div class="container">
-
-  <div class="option-group">
-    <label>
-      <input type="checkbox" bind:checked="{pollSettings.captcha}" />
-      <span>Enable Captcha</span>
-    </label>
-    <label>
-      <input type="checkbox" bind:checked="{pollSettings.multiplePollAnswers}" />
-      <span>Allow multiple votes</span>
-    </label>
-    <label>
-      <input type="checkbox" bind:checked="{pollSettings.loginToVote}" />
-      <span>Login to vote</span>
-    </label>
-  </div>
-  <button class="create" on:click="{createPoll}">Create Poll</button>
-  <button class="draft" on:click="{saveAsDraft}">Save as Draft</button>
+<div class="option-group">
+  <label>
+    <input type="checkbox" bind:checked="{pollSettings.captcha}" />
+    <span>Enable Captcha</span>
+  </label>
+  <label>
+    <input type="checkbox" bind:checked="{pollSettings.multiplePollAnswers}" />
+    <span>Allow multiple votes</span>
+  </label>
+  <label>
+    <input type="checkbox" bind:checked="{pollSettings.loginToVote}" />
+    <span>Login to vote</span>
+  </label>
 </div>
+<button class="create" on:click="{createPoll}">Create Poll</button>
+<button class="draft" on:click="{saveAsDraft}">Save as Draft</button>
 
 <style>
-  .container {
-    margin-top: 2rem;
-    background-color: var(--background-secondary);
-    border: 2px solid black;
-    padding: 1rem 1rem;
-  }
   .option-group {
     display: flex;
     flex-direction: column;
@@ -80,6 +71,7 @@
     content: '';
   }
   button {
+    height: 2rem;
     width: 100%;
     margin-top: 1rem;
     cursor: pointer;
