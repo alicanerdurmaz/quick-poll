@@ -1,18 +1,14 @@
 <script>
-  export let segment
+  import { goto } from '@sapper/app'
 </script>
 
 <header>
   <nav>
     <ul>
-      {#if true}
-        <li>Create Poll</li>
-      {/if}
-      <li>Log In</li>
-      <li>Sign In</li>
+      <li on:click="{() => goto('/login')}">Log In</li>
     </ul>
   </nav>
-  <div>
+  <div on:click="{() => goto('/')}">
     <h1>
       Quick
       <span class="pink">Poll</span>
@@ -27,6 +23,8 @@
     margin-bottom: 0;
   }
   div {
+    cursor: pointer;
+    user-select: none;
     text-align: center;
   }
   h1 {
@@ -46,6 +44,8 @@
     align-items: center;
   }
   li {
+    cursor: pointer;
+    user-select: none;
     margin: 8px;
     font-weight: bold;
     opacity: 0.75;

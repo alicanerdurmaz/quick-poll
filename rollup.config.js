@@ -24,11 +24,7 @@ export default {
       replace({
         'process.browser': true,
         'process.env.NODE_ENV': JSON.stringify(mode),
-        process: JSON.stringify({
-          env: {
-            ...dotenvConfig.parsed, // attached the .env config
-          },
-        }),
+        FIREBASE_CONFIG: JSON.stringify(dotenvConfig.parsed),
       }),
       svelte({
         dev,

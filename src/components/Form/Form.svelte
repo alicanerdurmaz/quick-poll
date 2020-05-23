@@ -7,8 +7,6 @@
   import PollSettings from './PollSettings.svelte'
   import Loading from '../Loading.svelte'
 
-  const firestore = getContext('firestore')
-
   let error = false
   let errorMessage = 'Something went wrong. Please try again later'
   let loading = false
@@ -99,14 +97,33 @@
       }, 3000)
       return
     }
-    const filteredOptionList = optionList.filter((e) => e.text.length >= 1)
-    const pollObject = { pollSettings: pollSettings, optionList: filteredOptionList, question: question }
 
     loading = true
-    const db = $firestore
-    db.collection('anonym')
+    saveToDb()
+  }
+
+  async function saveToDb() {
+    const { fs, db } = await import('../../helpers/firebase.js')
+
+    const filteredOptionList = optionList.map((e) => {
+      if (e.text.length >= 1) {
+        return {
+          text: e.text,
+          voteCount: 0,
+        }
+      }
+    })
+
+    const pollObject = {
+      pollSettings: pollSettings,
+      optionList: filteredOptionList,
+      question: question,
+      votedUserList: [],
+    }
+    db.collection('anonymous')
       .add({
         pollObject: pollObject,
+        createdAt: fs.FieldValue.serverTimestamp(),
       })
       .then(function () {
         console.log('Document successfully written!')
@@ -117,11 +134,13 @@
         return error
       })
       .then(function (err) {
-        errorMessage = err.message
-        error = true
-        setTimeout(() => {
-          error = false
-        }, 3000)
+        if (err) {
+          errorMessage = err.message
+          error = true
+          setTimeout(() => {
+            error = false
+          }, 3000)
+        }
       })
   }
 </script>

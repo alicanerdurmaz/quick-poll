@@ -7,7 +7,7 @@
   export let deleteOption
 </script>
 
-<li in:fly="{{ x: -100, duration: 500 }}" out:scale="{{ duration: 800, delay: 0 }}">
+<li in:fly="{{ x: -100, duration: 500 }}" out:scale|local="{{ duration: 800, delay: 0 }}">
   <label for="question" class="label">Option</label>
   <textarea
     class="option"
