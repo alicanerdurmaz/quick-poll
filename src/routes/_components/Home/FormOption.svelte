@@ -1,6 +1,6 @@
 <script>
   import { fly, scale } from 'svelte/transition'
-  import { textAreaResize } from '../../helpers/textarea-auto-resize'
+  import { textAreaResize } from '../../../helpers/textarea-auto-resize'
 
   export let index
   export let option

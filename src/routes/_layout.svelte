@@ -1,5 +1,5 @@
 <script>
-  import Header from '../components/Header.svelte'
+  import Header from './_components/Header.svelte'
 
   export let segment
 </script>

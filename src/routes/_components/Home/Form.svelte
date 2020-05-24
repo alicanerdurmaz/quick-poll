@@ -1,4 +1,5 @@
 <script>
+  import { goto } from '@sapper/app'
   import { onMount, getContext } from 'svelte'
   import { flip } from 'svelte/animate'
   import Modal from '../Modal.svelte'
@@ -108,46 +109,40 @@
   }
 
   async function saveToDb() {
-    const { fs, db } = await import('../../helpers/firebase.js')
+    const { fs, db } = await import('../../../helpers/firebase.js')
 
-    const filteredOptionList = optionList.map((e) => {
-      if (e.text.length >= 1) {
-        return {
-          text: e.text,
-          voteCount: 0,
-        }
-      }
-    })
+    const filteredOptionList = optionList
+      .filter((e) => e.text.length >= 1)
+      .map((e) => {
+        return { text: e.text, voteCount: 0 }
+      })
 
     const pollObject = {
       pollSettings: pollSettings,
       optionList: filteredOptionList,
       question: question,
-      votedUserList: [],
     }
-    db.collection('poll')
-      .add({
-        user: 'anonymous',
-        pollObject: pollObject,
-        createdAt: fs.FieldValue.serverTimestamp(),
-      })
-      .then(function () {
-        console.log('Document successfully written!')
-        loading = false
-      })
-      .catch(function (error) {
-        loading = false
-        return error
-      })
-      .then(function (err) {
-        if (err) {
-          errorMessage = err.message
-          error = true
-          setTimeout(() => {
-            error = false
-          }, 3000)
-        }
-      })
+    try {
+      const docPollRef = await db
+        .collection('poll')
+        .add({ user: 'anonymous', pollObject: pollObject, createdAt: fs.FieldValue.serverTimestamp() })
+
+      const docPollVotedUserListRef = await db.collection('poll').doc(docPollRef.id).collection('VotedUserList')
+      // .doc('alicanerdurmaz')
+      // .set({ voted: 'true' })
+
+      loading = false
+
+      goto(`/poll/${docPollRef.id}`)
+    } catch (err) {
+      errorMessage = err.message
+      error = true
+      loading = false
+      console.log(err)
+      setTimeout(() => {
+        error = false
+      }, 3000)
+    }
   }
 </script>
 
