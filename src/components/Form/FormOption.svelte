@@ -10,11 +10,10 @@
 <li in:fly="{{ x: -100, duration: 500 }}" out:scale|local="{{ duration: 800, delay: 0 }}">
   <label for="question" class="label">Option</label>
   <textarea
+    use:textAreaResize
     class="option"
     placeholder="Enter Poll Option"
     autocomplete="off"
-    data-height="1rem"
-    use:textAreaResize
     maxlength="240"
     bind:value="{option.text}"
   ></textarea>
@@ -60,6 +59,7 @@
     font-size: 11px;
   }
   textarea {
+    max-height: 10rem;
     width: 100%;
     padding: 0;
     margin: 0;
@@ -71,6 +71,7 @@
     background: none;
     color: white;
     font-size: 16px;
+    overflow: scroll;
   }
   button {
     user-select: none;

@@ -1,5 +1,5 @@
 function resize({ target }) {
-  target.style.height = target.getAttribute('data-height')
+  target.style.height = '1rem'
   target.style.height = +target.scrollHeight + 'px'
 }
 

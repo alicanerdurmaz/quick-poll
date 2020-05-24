@@ -82,6 +82,9 @@
     font-weight: 600;
     padding: 0.5rem 0rem;
     font-size: 1rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    line-height: 1;
   }
   .create {
     background: #aa4b6b; /* fallback for old browsers */

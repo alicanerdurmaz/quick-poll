@@ -1,17 +1,20 @@
 <script>
   import { onMount, getContext } from 'svelte'
   import { flip } from 'svelte/animate'
-  import { textAreaResize } from '../../helpers/textarea-auto-resize'
   import Modal from '../Modal.svelte'
   import FormOption from './FormOption.svelte'
   import PollSettings from './PollSettings.svelte'
   import Loading from '../Loading.svelte'
 
+  let formRef
+  let listRef
+  let questionRef
+
   let error = false
   let errorMessage = 'Something went wrong. Please try again later'
   let loading = false
-  let formRef
   let showModal = false
+
   let question = ''
   let optionList = [
     { text: '', id: 'default1' },
@@ -39,12 +42,10 @@
   })
 
   function addOption() {
-    const newHeight = formRef.offsetHeight + 87
-    formRef.style.height = newHeight + 'px'
     optionList = [...optionList, { text: '', id: Date.now() }]
   }
 
-  function deleteOption(e, index) {
+  async function deleteOption(e, index) {
     const beforeHeight = formRef.offsetHeight
     formRef.style.height = beforeHeight + 'px'
 
@@ -55,8 +56,12 @@
     optionList.splice(index, 1)
     optionList = optionList
 
-    const afterHeight = beforeHeight - 87
+    const afterHeight = beforeHeight - e.target.parentNode.parentNode.offsetHeight
     formRef.style.height = afterHeight + 'px'
+
+    setTimeout(() => {
+      formRef.style.height = null
+    }, 600)
   }
 
   function saveAsDraft() {
@@ -120,8 +125,9 @@
       question: question,
       votedUserList: [],
     }
-    db.collection('anonymous')
+    db.collection('poll')
       .add({
+        user: 'anonymous',
         pollObject: pollObject,
         createdAt: fs.FieldValue.serverTimestamp(),
       })
@@ -153,7 +159,7 @@
 {/if}
 <main>
   <form bind:this="{formRef}">
-    <div class="question-container">
+    <div class="question-container" bind:this="{questionRef}">
       <label for="question" class="label">Question</label>
       <textarea
         class="question"
@@ -164,7 +170,7 @@
       ></textarea>
     </div>
 
-    <ul>
+    <ul bind:this="{listRef}">
       {#each optionList as option, index (option.id)}
         <div animate:flip="{{ duration: 190 }}">
           <FormOption bind:option deleteOption="{deleteOption}" index="{index}" />
