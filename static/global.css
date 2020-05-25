@@ -150,7 +150,6 @@ video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -207,4 +206,9 @@ table {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #ff6aad6e;
+}
+input[type='checkbox'],
+input[type='radio'] {
+  padding: 0;
+  margin: 0;
 }

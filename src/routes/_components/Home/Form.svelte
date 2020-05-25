@@ -3,6 +3,7 @@
   import { onMount, getContext } from 'svelte'
   import { flip } from 'svelte/animate'
   import Modal from '../Modal.svelte'
+  import { textAreaResize } from '../../../helpers/textarea-auto-resize'
   import FormOption from './FormOption.svelte'
   import PollSettings from './PollSettings.svelte'
   import Loading from '../Loading.svelte'
@@ -157,6 +158,7 @@
     <div class="question-container" bind:this="{questionRef}">
       <label for="question" class="label">Question</label>
       <textarea
+        use:textAreaResize
         class="question"
         placeholder="E.g. What is your favorite programming language ?"
         autocomplete="off"

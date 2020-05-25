@@ -59,7 +59,6 @@
     font-size: 11px;
   }
   textarea {
-    max-height: 10rem;
     width: 100%;
     padding: 0;
     margin: 0;

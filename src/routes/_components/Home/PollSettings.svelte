@@ -38,10 +38,7 @@
     display: block;
     margin-left: 8px;
   }
-  input[type='checkbox'] {
-    padding: 0;
-    margin: 0;
-  }
+
   input {
     user-select: none;
     position: relative;
