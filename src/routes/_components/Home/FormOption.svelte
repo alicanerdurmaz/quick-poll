@@ -33,12 +33,7 @@
     z-index: 1;
     text-align: center;
     margin: 1rem 0rem;
-
     cursor: pointer;
-    cursor: hand;
-    cursor: grab;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
   }
   li:active {
     cursor: -webkit-grabbing;
