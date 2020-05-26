@@ -29,6 +29,11 @@
     captcha: false,
   }
 
+  $: optionList, addOptionIfLastItemFocused()
+  function addOptionIfLastItemFocused() {
+    if (optionList[optionList.length - 1].text < 2) return
+    addOption()
+  }
   onMount(() => {
     const draftData = window.location.hash.substring(1)
 
