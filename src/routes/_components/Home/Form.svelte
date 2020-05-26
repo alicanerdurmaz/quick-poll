@@ -113,13 +113,7 @@
   async function saveToDb() {
     const { fs, db } = await import('../../../helpers/firebase.js')
 
-    const filteredOptionList = optionList
-      .filter((e) => e.text.length >= 1)
-      .map((e) => {
-        return e.text
-      })
-
-    const pollObj = { pollSettings, optionList: filteredOptionList, question }
+    const pollObj = { pollSettings, optionList, question }
     const { docPollRef, firebaseError } = await saveVoteToDb(db, fs, pollObj)
 
     if (firebaseError) {

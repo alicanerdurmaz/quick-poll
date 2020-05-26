@@ -31,7 +31,7 @@
 <script>
   import { onMount } from 'svelte'
   import { goto } from '@sapper/app'
-  import { submitVoteToDb } from '../../helpers/firebase-functions.js'
+  import { submitVoteToDb, checkCurrentUserVote } from '../../helpers/firebase-functions.js'
   import VoteForm from './_VoteForm.svelte'
   import Loading from '../_components/Loading.svelte'
 
@@ -44,8 +44,16 @@
   let firestore = null
   let firebasefirestore = null
 
+  $: globalUser, checkUserIsVoted()
+  let isCurrentUserVoted = null
+
+  async function checkUserIsVoted() {
+    if (globalUser) isCurrentUserVoted = await checkCurrentUserVote(firestore, poll.pollID, globalUser.uid)
+  }
+
   onMount(async () => {
     const { auth, db, fs } = await import('../../helpers/firebase.js')
+
     await auth.signInAnonymously()
 
     auth.onAuthStateChanged(function (user) {

@@ -21,14 +21,21 @@ export async function submitVoteToDb(firestore, firebasefirestore, selectedOptio
 }
 
 export async function saveVoteToDb(firestore, firebasefirestore, pollObj) {
+  let firebaseError = false
+  let docPollRef
+
   const { pollSettings, optionList, question } = pollObj
 
-  let docPollRef
-  let firebaseError = false
+  const filteredOptionList = optionList
+    .filter((e) => e.text.length >= 1)
+    .map((e) => {
+      return e.text
+    })
+
   try {
     docPollRef = await firestore.collection('poll').add({
       pollSettings,
-      optionList,
+      optionList: filteredOptionList,
       question,
       createdAt: firebasefirestore.FieldValue.serverTimestamp(),
     })
@@ -45,4 +52,15 @@ export async function saveVoteToDb(firestore, firebasefirestore, pollObj) {
     firebaseError = err.message
   }
   return { docPollRef, firebaseError }
+}
+
+export async function checkCurrentUserVote(firestore, pollId, userId) {
+  const docRef = firestore.collection('poll').doc(pollId).collection('VotedUserList').doc(userId)
+  const doc = await docRef.get()
+
+  if (doc.exists) {
+    return true
+  } else {
+    return false
+  }
 }
