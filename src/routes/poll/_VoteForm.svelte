@@ -3,46 +3,21 @@
   export let selectedOptions
 </script>
 
-<div class="container">
-  <div class="question-container">
-    <h1 class="question">{poll.question}</h1>
-  </div>
-
-  <div class="option-container">
-    {#each poll.optionList as option, i}
-      <label>
-        {#if poll.pollSettings.multiplePollAnswers}
-          <input type="checkbox" bind:group="{selectedOptions}" value="{i}" />
-          <p>{option}</p>
-        {:else}
-          <input type="radio" bind:group="{selectedOptions}" value="{i}" />
-          <p>{option}</p>
-        {/if}
-      </label>
-    {/each}
-  </div>
+<div class="option-container">
+  {#each poll.optionList as option, i}
+    <label>
+      {#if poll.pollSettings.multiplePollAnswers}
+        <input type="checkbox" bind:group="{selectedOptions}" value="{i}" />
+        <p>{option}</p>
+      {:else}
+        <input type="radio" bind:group="{selectedOptions}" value="{i}" />
+        <p>{option}</p>
+      {/if}
+    </label>
+  {/each}
 </div>
 
 <style>
-  .container {
-    padding: 1rem;
-    border-radius: 4px;
-    border: 2px solid black;
-    background-color: var(--background-secondary);
-  }
-  .question-container {
-    padding-top: 0.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid var(--text-secondary);
-  }
-  .question {
-    line-height: 1.1;
-    font-size: 1.5rem;
-    font-weight: 700;
-    padding: 0 0.5rem;
-    padding-right: 0;
-    font-family: Lato;
-  }
   .option-container {
     margin-top: 0.5rem;
     display: flex;

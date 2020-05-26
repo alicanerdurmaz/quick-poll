@@ -72,10 +72,11 @@
     firebasefirestore = fs
     loading = false
 
-    const docRef = firestore.collection('poll').doc('7pwmkV5VHe8VLtjE3DST')
+    const docRef = firestore.collection('poll').doc(poll.pollID)
 
     let unsubscribe = await docRef.onSnapshot((doc) => {
       const data = { ...doc.data() }
+      console.log(data)
       optionListBinded.forEach((e, i) => {
         optionListBinded[i].voteCount = data[i]
       })
@@ -95,37 +96,55 @@
 </script>
 
 <main>
-
-  {#if isCurrentUserVoted === true}
-    <Result optionList="{optionListBinded}" />
-  {:else}
-    <VoteForm bind:selectedOptions poll="{poll}" />
-    <div class="button-group">
-      {#if loading || isCurrentUserVoted === null}
-        <div class="loading-container">
-          <Loading />
-        </div>
-      {:else}
-        {#if isCurrentUserVoted === false}
-          <button class="submit" on:click="{submitVote}">Submit</button>
-        {/if}
-        <button class="result">Show Results</button>
-      {/if}
+  <div class="container">
+    <div class="question-container">
+      <h1 class="question">{poll.question}</h1>
     </div>
-  {/if}
-
+    {#if isCurrentUserVoted === true}
+      <Result optionList="{optionListBinded}" />
+    {:else}
+      <VoteForm bind:selectedOptions poll="{poll}" />
+      <div class="button-group">
+        {#if loading || isCurrentUserVoted === null}
+          <div class="loading-container">
+            <Loading />
+          </div>
+        {:else}
+          {#if isCurrentUserVoted === false}
+            <button class="submit" on:click="{submitVote}">Submit</button>
+          {/if}
+          <button class="result">Show Results</button>
+        {/if}
+      </div>
+    {/if}
+  </div>
 </main>
 
 <style>
-  .loading-container {
-    flex: 1;
-    text-align: center;
-    margin-top: 8px;
+  .container {
+    padding: 1rem;
+    border-radius: 4px;
+    border: 2px solid black;
+    background-color: var(--background-secondary);
   }
+
   main {
     max-width: 800px;
     margin: 2rem auto;
     padding: 0 0.5rem;
+  }
+  .question-container {
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--text-secondary);
+  }
+  .question {
+    line-height: 1.1;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0 0.5rem;
+    padding-right: 0;
+    font-family: Lato;
   }
   .button-group {
     width: 100%;
@@ -170,5 +189,10 @@
       #6c5b7b,
       #355c7d
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  .loading-container {
+    flex: 1;
+    text-align: center;
+    margin-top: 8px;
   }
 </style>
