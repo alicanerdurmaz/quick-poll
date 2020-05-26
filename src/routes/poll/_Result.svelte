@@ -1,16 +1,32 @@
 <script>
+  import { onMount } from 'svelte'
+  import { flip } from 'svelte/animate'
   export let optionList
+  export let totalVoteCount
+
+  let renderList
+  $: optionList, prepareToRender()
+
+  function prepareToRender() {
+    renderList = [...optionList]
+    renderList.sort(function (a, b) {
+      return b.voteCount - a.voteCount
+    })
+    renderList.forEach((e) => {
+      e.percentage = Math.round((e.voteCount * 100) / totalVoteCount)
+    })
+  }
 </script>
 
 <ul class="option-container">
-  {#each optionList as option (option.index)}
-    <li>
+  {#each renderList as option, i (option.index)}
+    <li animate:flip="{{ duration: 900 }}">
       <div class="line1">
         <h1>{option.text}</h1>
-        <span class="percentage">%50</span>
+        <span class="percentage">{option.percentage}%</span>
       </div>
       <div class="progress-background">
-        <span class="progress"></span>
+        <span class="{`progress color${i}`}" style="{`width:${option.percentage}%`}"></span>
       </div>
       <div class="vote-count">{option.voteCount} Votes</div>
     </li>
@@ -63,7 +79,7 @@
     display: block;
     width: 50%;
     height: 100%;
-    background-color: brown;
+    background-color: #fbf4f9;
     transition: all 0.8s ease;
     border-radius: 0.5rem;
   }
@@ -76,5 +92,21 @@
   .line1 {
     display: flex;
     width: 100%;
+  }
+
+  .color0 {
+    background-color: var(--progress-color0);
+  }
+  .color1 {
+    background-color: var(--progress-color1);
+  }
+  .color2 {
+    background-color: var(--progress-color2);
+  }
+  .color3 {
+    background-color: var(--progress-color3);
+  }
+  .color4 {
+    background-color: var(--progress-color4);
   }
 </style>

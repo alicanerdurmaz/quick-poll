@@ -49,6 +49,7 @@
     }
   })
 
+  let totalVoteCount = 0
   let globalUser = null
   let firestore = null
   let firebasefirestore = null
@@ -77,7 +78,9 @@
 
     let unsubscribe = await docRef.onSnapshot((doc) => {
       const data = { ...doc.data() }
+      totalVoteCount = 0
       optionListBinded.forEach((e, i) => {
+        totalVoteCount += data[i]
         optionListBinded[i].voteCount = data[i]
       })
     })
@@ -102,7 +105,7 @@
     </div>
     {#if isCurrentUserVoted === true}
       <div in:fly="{{ y: 500, duration: 400, delay: 100 }}">
-        <Result optionList="{optionListBinded}" />
+        <Result optionList="{optionListBinded}" totalVoteCount="{totalVoteCount}" />
       </div>
     {:else}
       <div out:fade="{{ duration: 200, delay: 0 }}">

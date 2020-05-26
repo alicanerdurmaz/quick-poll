@@ -5,18 +5,18 @@
 </script>
 
 <div class="option-group">
-  <label>
+  <!-- <label>
     <input type="checkbox" bind:checked="{pollSettings.captcha}" />
     <span>Enable Captcha</span>
-  </label>
+  </label> -->
   <label>
     <input type="checkbox" bind:checked="{pollSettings.multiplePollAnswers}" />
     <span>Allow multiple votes</span>
   </label>
-  <label>
+  <!-- <label>
     <input type="checkbox" bind:checked="{pollSettings.loginToVote}" />
     <span>Login to vote</span>
-  </label>
+  </label> -->
 </div>
 <button class="create" on:click="{createPoll}">Create Poll</button>
 <button class="draft" on:click="{saveAsDraft}">Save as Draft</button>
