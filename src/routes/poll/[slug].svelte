@@ -29,16 +29,17 @@
 </script>
 
 <script>
-  import VoteForm from './_VoteForm.svelte'
-  import Loading from '../_components/Loading.svelte'
   import { onMount } from 'svelte'
   import { goto } from '@sapper/app'
+  import { submitVoteToDb } from '../../helpers/firebase-functions.js'
+  import VoteForm from './_VoteForm.svelte'
+  import Loading from '../_components/Loading.svelte'
 
   export let poll
 
   let loading = true
-  let selectedOptions = [0, 1]
-  $: console.log(typeof selectedOptions)
+  let selectedOptions = []
+
   let globalUser = null
   let firestore = null
   let firebasefirestore = null
@@ -51,33 +52,14 @@
       globalUser = user || null
     })
 
-    loading = false
     firestore = db
     firebasefirestore = fs
+    loading = false
   })
 
   async function submitVote() {
     let loading = true
-    try {
-      const docRef = firestore.collection('poll').doc(poll.pollID)
-      let batch = firestore.batch()
-
-      typeof selectedOptions === 'object'
-        ? selectedOptions.forEach((e) => {
-            batch.update(docRef, {
-              [e]: firebasefirestore.FieldValue.increment(1),
-            })
-          })
-        : batch.update(docRef, {
-            [selectedOptions]: firebasefirestore.FieldValue.increment(1),
-          })
-
-      await batch.commit()
-
-      await docRef.collection('VotedUserList').doc(globalUser.uid).set({ voted: 'true' })
-    } catch (err) {
-      console.log(err)
-    }
+    await submitVoteToDb(firestore, firebasefirestore, selectedOptions, poll.pollID, globalUser.uid)
     loading = false
   }
 </script>

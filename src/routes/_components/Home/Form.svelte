@@ -4,6 +4,7 @@
   import { flip } from 'svelte/animate'
   import Modal from '../Modal.svelte'
   import { textAreaResize } from '../../../helpers/textarea-auto-resize'
+  import { saveVoteToDb } from '../../../helpers/firebase-functions'
   import FormOption from './FormOption.svelte'
   import PollSettings from './PollSettings.svelte'
   import Loading from '../Loading.svelte'
@@ -118,32 +119,18 @@
         return e.text
       })
 
-    try {
-      const docPollRef = await db
-        .collection('poll')
-        .add({ pollSettings, optionList: filteredOptionList, question, createdAt: fs.FieldValue.serverTimestamp() })
+    const pollObj = { pollSettings, optionList: filteredOptionList, question }
+    const { docPollRef, firebaseError } = await saveVoteToDb(db, fs, pollObj)
 
-      filteredOptionList.forEach(async (e, i) => {
-        await db
-          .collection('poll')
-          .doc(docPollRef.id)
-          .update({
-            [i]: 0,
-          })
-      })
-      const docPollVotedUserListRef = await db.collection('poll').doc(docPollRef.id).collection('VotedUserList')
-
-      loading = false
-
-      goto(`/poll/${docPollRef.id}`)
-    } catch (err) {
-      errorMessage = err.message
+    if (firebaseError) {
+      errorMessage = firebaseError.message
       error = true
       loading = false
-      console.log(err)
       setTimeout(() => {
         error = false
       }, 3000)
+    } else {
+      goto(`/poll/${docPollRef.id}`)
     }
   }
 </script>
