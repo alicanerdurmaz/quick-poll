@@ -60,7 +60,9 @@ export async function checkCurrentUserVote(firestore, pollId, userId) {
 
   if (doc.exists) {
     return true
-  } else {
+  } else if (!doc.exists) {
     return false
+  } else {
+    return null
   }
 }

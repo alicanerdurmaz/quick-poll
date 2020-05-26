@@ -29,16 +29,24 @@
 </script>
 
 <script>
-  import { onMount } from 'svelte'
+  import { onMount, onDestroy } from 'svelte'
   import { goto } from '@sapper/app'
   import { submitVoteToDb, checkCurrentUserVote } from '../../helpers/firebase-functions.js'
   import VoteForm from './_VoteForm.svelte'
+  import Result from './_Result.svelte'
   import Loading from '../_components/Loading.svelte'
 
   export let poll
 
   let loading = true
   let selectedOptions = []
+  let optionListBinded = poll.optionList.map((e, i) => {
+    return {
+      text: e,
+      voteCount: 0,
+      index: i,
+    }
+  })
 
   let globalUser = null
   let firestore = null
@@ -63,27 +71,49 @@
     firestore = db
     firebasefirestore = fs
     loading = false
+
+    const docRef = firestore.collection('poll').doc('7pwmkV5VHe8VLtjE3DST')
+
+    let unsubscribe = await docRef.onSnapshot((doc) => {
+      const data = { ...doc.data() }
+      optionListBinded.forEach((e, i) => {
+        optionListBinded[i].voteCount = data[i]
+      })
+    })
+
+    onDestroy(() => {
+      unsubscribe()
+    })
   })
 
   async function submitVote() {
     let loading = true
     await submitVoteToDb(firestore, firebasefirestore, selectedOptions, poll.pollID, globalUser.uid)
+    isCurrentUserVoted = true
     loading = false
   }
 </script>
 
 <main>
-  <VoteForm bind:selectedOptions poll="{poll}" />
-  <div class="button-group">
-    {#if loading}
-      <div class="loading-container">
-        <Loading />
-      </div>
-    {:else}
-      <button class="submit" on:click="{submitVote}">Submit</button>
-      <button class="result">Show Results</button>
-    {/if}
-  </div>
+
+  {#if isCurrentUserVoted === true}
+    <Result optionList="{optionListBinded}" />
+  {:else}
+    <VoteForm bind:selectedOptions poll="{poll}" />
+    <div class="button-group">
+      {#if loading || isCurrentUserVoted === null}
+        <div class="loading-container">
+          <Loading />
+        </div>
+      {:else}
+        {#if isCurrentUserVoted === false}
+          <button class="submit" on:click="{submitVote}">Submit</button>
+        {/if}
+        <button class="result">Show Results</button>
+      {/if}
+    </div>
+  {/if}
+
 </main>
 
 <style>
