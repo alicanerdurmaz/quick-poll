@@ -115,22 +115,23 @@
     const filteredOptionList = optionList
       .filter((e) => e.text.length >= 1)
       .map((e) => {
-        return { text: e.text, voteCount: 0 }
+        return e.text
       })
 
-    const pollObject = {
-      pollSettings: pollSettings,
-      optionList: filteredOptionList,
-      question: question,
-    }
     try {
       const docPollRef = await db
         .collection('poll')
-        .add({ user: 'anonymous', pollObject: pollObject, createdAt: fs.FieldValue.serverTimestamp() })
+        .add({ pollSettings, optionList: filteredOptionList, question, createdAt: fs.FieldValue.serverTimestamp() })
 
+      filteredOptionList.forEach(async (e, i) => {
+        await db
+          .collection('poll')
+          .doc(docPollRef.id)
+          .update({
+            [i]: 0,
+          })
+      })
       const docPollVotedUserListRef = await db.collection('poll').doc(docPollRef.id).collection('VotedUserList')
-      // .doc('alicanerdurmaz')
-      // .set({ voted: 'true' })
 
       loading = false
 

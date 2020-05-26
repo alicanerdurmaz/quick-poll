@@ -9,14 +9,14 @@
   </div>
 
   <div class="option-container">
-    {#each poll.optionList as { text }, i}
+    {#each poll.optionList as option, i}
       <label>
         {#if poll.pollSettings.multiplePollAnswers}
           <input type="checkbox" bind:group="{selectedOptions}" value="{i}" />
-          <p>{text}</p>
+          <p>{option}</p>
         {:else}
           <input type="radio" bind:group="{selectedOptions}" value="{i}" />
-          <p>{text}</p>
+          <p>{option}</p>
         {/if}
       </label>
     {/each}
