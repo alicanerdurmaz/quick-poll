@@ -10,7 +10,6 @@
       return b.voteCount - a.voteCount
     })
   }
-  $: console.log(optionListSorted)
 </script>
 
 <ul class="option-container">
@@ -47,7 +46,7 @@
     border: 2px solid black;
     border-radius: 4px;
     background: #0e141b;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
   h1 {
     display: block;

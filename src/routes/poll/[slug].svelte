@@ -30,6 +30,7 @@
 
 <script>
   import { onMount, onDestroy } from 'svelte'
+  import { fly, fade } from 'svelte/transition'
   import { goto } from '@sapper/app'
   import { submitVoteToDb, checkCurrentUserVote } from '../../helpers/firebase-functions.js'
   import VoteForm from './_VoteForm.svelte'
@@ -76,7 +77,6 @@
 
     let unsubscribe = await docRef.onSnapshot((doc) => {
       const data = { ...doc.data() }
-      console.log(data)
       optionListBinded.forEach((e, i) => {
         optionListBinded[i].voteCount = data[i]
       })
@@ -101,9 +101,13 @@
       <h1 class="question">{poll.question}</h1>
     </div>
     {#if isCurrentUserVoted === true}
-      <Result optionList="{optionListBinded}" />
+      <div in:fly="{{ y: 500, duration: 400, delay: 100 }}">
+        <Result optionList="{optionListBinded}" />
+      </div>
     {:else}
-      <VoteForm bind:selectedOptions poll="{poll}" />
+      <div out:fade="{{ duration: 200, delay: 0 }}">
+        <VoteForm bind:selectedOptions poll="{poll}" />
+      </div>
       <div class="button-group">
         {#if loading || isCurrentUserVoted === null}
           <div class="loading-container">

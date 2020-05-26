@@ -5,7 +5,7 @@
 <header>
   <nav>
     <ul>
-      <li on:click="{() => goto('/login')}">Log In</li>
+      <!-- <li on:click="{() => goto('/login')}">Log In</li> -->
       <li class="create-poll" on:click="{() => goto('/')}">Create Poll</li>
     </ul>
   </nav>
