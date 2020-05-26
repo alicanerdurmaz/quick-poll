@@ -32,25 +32,26 @@ export async function saveVoteToDb(firestore, firebasefirestore, pollObj) {
       return e.text
     })
 
+  const objToSend = {
+    pollSettings,
+    optionList: filteredOptionList,
+    question,
+    createdAt: firebasefirestore.FieldValue.serverTimestamp(),
+  }
+
+  optionList.forEach((e, i) => {
+    objToSend[i] = 0
+  })
+
   try {
     docPollRef = await firestore.collection('poll').add({
-      pollSettings,
-      optionList: filteredOptionList,
-      question,
-      createdAt: firebasefirestore.FieldValue.serverTimestamp(),
-    })
-
-    await optionList.forEach(async (e, i) => {
-      await firestore
-        .collection('poll')
-        .doc(docPollRef.id)
-        .update({
-          [i]: 0,
-        })
+      ...objToSend,
     })
   } catch (err) {
+    console.log(err.message)
     firebaseError = err.message
   }
+  console.log(firebaseError)
   return { docPollRef, firebaseError }
 }
 

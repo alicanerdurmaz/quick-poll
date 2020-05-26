@@ -1,19 +1,9 @@
 <script>
   export let optionList
-
-  let optionListSorted = sortList(optionList)
-  $: optionList, () => sortList(optionList)
-
-  function sortList(list) {
-    const tempList = [...list]
-    return tempList.sort(function (a, b) {
-      return b.voteCount - a.voteCount
-    })
-  }
 </script>
 
 <ul class="option-container">
-  {#each optionListSorted as option (option.index)}
+  {#each optionList as option (option.index)}
     <li>
       <div class="line1">
         <h1>{option.text}</h1>

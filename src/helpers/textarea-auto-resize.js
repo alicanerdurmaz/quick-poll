@@ -1,5 +1,5 @@
 function resize({ target }) {
-  target.style.height = '1rem'
+  target.style.height = '19px'
   target.style.height = +target.scrollHeight + 'px'
 }
 

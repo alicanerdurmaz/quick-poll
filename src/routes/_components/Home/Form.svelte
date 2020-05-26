@@ -117,12 +117,12 @@
     const { docPollRef, firebaseError } = await saveVoteToDb(db, fs, pollObj)
 
     if (firebaseError) {
-      errorMessage = firebaseError.message
+      errorMessage = firebaseError
       error = true
       loading = false
       setTimeout(() => {
         error = false
-      }, 3000)
+      }, 5000)
     } else {
       goto(`/poll/${docPollRef.id}`)
     }
@@ -146,6 +146,7 @@
         autocomplete="off"
         maxlength="240"
         bind:value="{question}"
+        rows="1"
       ></textarea>
     </div>
 
@@ -181,6 +182,9 @@
 <div class="button-group"></div>
 
 <style>
+  textarea {
+    height: 19px;
+  }
   main {
     max-width: 800px;
     margin: 2rem auto;
@@ -219,18 +223,6 @@
     z-index: 99;
     color: var(--text-secondary);
     font-size: 11px;
-  }
-
-  textarea {
-    width: 100%;
-    resize: none;
-    outline: none;
-    -webkit-appearance: none;
-    background: none;
-    color: white;
-    border: none;
-    font-size: 16px;
-    height: 5rem;
   }
 
   ul {

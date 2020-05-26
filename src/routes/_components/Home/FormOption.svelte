@@ -16,6 +16,7 @@
     autocomplete="off"
     maxlength="240"
     bind:value="{option.text}"
+    rows="1"
   ></textarea>
   {#if option.id > 2}
     <button on:click="{(e) => deleteOption(e, index)}">X</button>
@@ -23,6 +24,9 @@
 </li>
 
 <style>
+  textarea {
+    height: 19px;
+  }
   li {
     width: 100%;
     display: flex;
@@ -53,20 +57,7 @@
     color: var(--text-secondary);
     font-size: 11px;
   }
-  textarea {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    z-index: 1;
-    resize: none;
-    outline: none;
-    border: none;
-    -webkit-appearance: none;
-    background: none;
-    color: white;
-    font-size: 16px;
-    overflow: scroll;
-  }
+
   button {
     user-select: none;
     cursor: pointer;
