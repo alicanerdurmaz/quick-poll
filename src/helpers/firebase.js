@@ -3,14 +3,14 @@ import 'firebase/firestore'
 import 'firebase/auth'
 
 var firebaseConfig = {
-  apiKey: FIREBASE_CONFIG.API_KEY,
-  authDomain: FIREBASE_CONFIG.AUTH_DOMAIN,
-  databaseURL: FIREBASE_CONFIG.DATABASE_URL,
-  projectId: FIREBASE_CONFIG.PROJECT_ID,
-  storageBucket: FIREBASE_CONFIG.STORAGE_BUCKET,
-  messagingSenderId: FIREBASE_CONFIG.MESSAGING_SENDER_ID,
-  appId: FIREBASE_CONFIG.ID,
-  measurementId: FIREBASE_CONFIG.MEASUREMENT_ID,
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASE_URL,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.ID,
+  measurementId: process.env.MEASUREMENT_ID,
 }
 
 firebase.initializeApp(firebaseConfig)
