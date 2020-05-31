@@ -2,7 +2,6 @@
   import { onMount } from 'svelte'
   import { flip } from 'svelte/animate'
 
-  export let isCurrentUserVoted
   export let optionList
   export let totalVoteCount
 
