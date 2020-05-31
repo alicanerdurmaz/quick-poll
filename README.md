@@ -2,6 +2,7 @@
   Quick Poll <br>
 	Create instant, real-time polls for free
 </h1>
+
 > 🚨 this project still under development.
 
 Made with Svelte, Firebase and ❤
