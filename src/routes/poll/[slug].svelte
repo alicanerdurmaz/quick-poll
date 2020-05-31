@@ -39,6 +39,7 @@
 
   export let poll
 
+  let showResult = false
   let loading = true
   let selectedOptions = []
   let optionListBinded = poll.optionList.map((e, i) => {
@@ -99,13 +100,20 @@
 </script>
 
 <main>
+  {#if !isCurrentUserVoted && showResult}
+    <div class="back" on:click="{() => (showResult = false)}">»&nbsp;back to voting screen</div>
+  {/if}
   <div class="container">
     <div class="question-container">
       <h1 class="question">{poll.question}</h1>
     </div>
-    {#if isCurrentUserVoted === true}
+    {#if isCurrentUserVoted || showResult}
       <div in:fly="{{ y: 500, duration: 400, delay: 100 }}">
-        <Result optionList="{optionListBinded}" totalVoteCount="{totalVoteCount}" />
+        <Result
+          optionList="{optionListBinded}"
+          totalVoteCount="{totalVoteCount}"
+          isCurrentUserVoted="{isCurrentUserVoted}"
+        />
       </div>
     {:else}
       <div out:fade="{{ duration: 200, delay: 0 }}">
@@ -120,7 +128,7 @@
           {#if isCurrentUserVoted === false}
             <button class="submit" on:click="{submitVote}">Submit</button>
           {/if}
-          <button class="result">Show Results</button>
+          <button class="result" on:click="{() => (showResult = true)}">Show Results</button>
         {/if}
       </div>
     {/if}
@@ -201,5 +209,15 @@
     flex: 1;
     text-align: center;
     margin-top: 8px;
+  }
+  .back {
+    cursor: pointer;
+    user-select: none;
+    color: var(--text-secondary);
+    padding-bottom: 0.5rem;
+    padding-left: 4px;
+  }
+  .back:hover {
+    color: var(--primary);
   }
 </style>

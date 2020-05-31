@@ -1,6 +1,8 @@
 <script>
   import { onMount } from 'svelte'
   import { flip } from 'svelte/animate'
+
+  export let isCurrentUserVoted
   export let optionList
   export let totalVoteCount
 
@@ -12,8 +14,13 @@
     renderList.sort(function (a, b) {
       return b.voteCount - a.voteCount
     })
+
     renderList.forEach((e) => {
-      e.percentage = Math.round((e.voteCount * 100) / totalVoteCount)
+      if (totalVoteCount === 0) {
+        e.percentage = 0
+      } else {
+        e.percentage = Math.round((e.voteCount * 100) / totalVoteCount)
+      }
     })
   }
 </script>
