@@ -3,8 +3,6 @@
 	Create instant, real-time polls for free
 </h1>
 
-> 🚨 this project still under development.
-
 Made with Svelte, Firebase and ❤
 
 🚀 [Live Demo](https://quickpoll.now.sh/)
